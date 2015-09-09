@@ -11,9 +11,9 @@ public class ChinaWeatherOpenHelper extends SQLiteOpenHelper {
     public final static  String CREATE_PROVINCE="create table province(id integer primary key autoincrement," +
             "province_name text,province_code text)";
     public final  static String CREATE_CITY="create table city(id integer primary " +
-            "key autoincrement city_name text, city_code text, province_id text)";
+            "key autoincrement,city_name text, city_code text, province_id text)";
     public final static String CREATE_COUNTY="create table county(id integer primary key" +
-            "autoincrement,county_name text,county_code text,city_id integer)";
+            " autoincrement,county_name text,county_code text,city_id integer)";
 
 
     public ChinaWeatherOpenHelper(Context context,String name,SQLiteDatabase.CursorFactory factory

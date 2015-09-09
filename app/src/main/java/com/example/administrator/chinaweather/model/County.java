@@ -42,6 +42,4 @@ public class County {
         CityId = cityId;
     }
 
-
-
 }

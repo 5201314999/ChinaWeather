@@ -27,7 +27,7 @@ public class ChinaWeatherDB {
     }
     public synchronized static ChinaWeatherDB getInstance(Context context){
         if(chinaWeatherDB==null){
-            ChinaWeatherDB chinaWeatherDB=new ChinaWeatherDB(context);
+             chinaWeatherDB=new ChinaWeatherDB(context);
         }
         return chinaWeatherDB;
     }
@@ -43,13 +43,13 @@ public class ChinaWeatherDB {
         List<Province> provinceList=new ArrayList<Province>();
         Cursor cursor=db.query("province",null,null,null,null,null,null);
         if(cursor.moveToFirst()){
-            Province province=new Province();
             do{
+                Province province=new Province();
                 province.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 province.setName(cursor.getString(cursor.getColumnIndex("province_name")));
                 province.setCode(cursor.getString(cursor.getColumnIndex("province_code")));
                 provinceList.add(province);
-            }while(cursor.moveToNext());
+             }while(cursor.moveToNext());
         }
         if(cursor!=null)
          cursor.close();
@@ -68,8 +68,8 @@ public class ChinaWeatherDB {
          List<City> cityList=new ArrayList<City>();
          Cursor cursor=db.query("city",null,"province_id=?",new String[]{String.valueOf(provinceId)},null,null,null);
          if(cursor.moveToFirst()) {
-             City city = new City();
              do {
+                 City city = new City();
                  city.setCityId(cursor.getInt(cursor.getColumnIndex("id")));
                  city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
                  city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
@@ -96,8 +96,8 @@ public class ChinaWeatherDB {
         Cursor cursor=db.query("county",null,"city_id=?",
                 new String[]{String.valueOf(cityId)},null,null,null);
         if(cursor.moveToFirst()) {
-            County county = new County();
             do {
+                County county = new County();
                 county.setCountyId(cursor.getInt(cursor.getColumnIndex("id")));
                 county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
                 county.setCountyCode(cursor.getString(cursor.getColumnIndex("county_code")));
