@@ -2,7 +2,10 @@ package com.example.administrator.chinaweather.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -51,6 +54,12 @@ public class ChooseAreaActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.setContentView(R.layout.choose_area);
+            SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
+            if(prefs.getBoolean("city_selected",false)){
+                Intent i=new Intent(this,WeatherActivity.class);
+                startActivity(i);
+                finish();
+            }
             list=new ArrayList<String>();
             listView=(ListView)findViewById(R.id.listview);
             textView=(TextView)findViewById(R.id.title_text);
@@ -69,6 +78,14 @@ public class ChooseAreaActivity extends Activity {
                         queryCounties(cityList.get(position));
                         selectedCity=cityList.get(position);
                     }
+                    else if(level==LEVEL_COUNTY){
+                        String countyCode=countyList.get(position).getCountyCode();
+                        Intent i=new Intent(ChooseAreaActivity.this,WeatherActivity.class);
+                        i.putExtra("county_code",countyCode);
+                        Log.i("false",countyCode);
+                        startActivity(i);
+                        finish();
+                    }
                 }
             });
             queryProvinces();
@@ -79,7 +96,6 @@ public class ChooseAreaActivity extends Activity {
             list.clear();
             for (Province p : provinceList) {
                 list.add(p.getName());
-                Log.d(p.getCode(),p.getName());
             }
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
@@ -133,8 +149,7 @@ public class ChooseAreaActivity extends Activity {
         HttpUtil.sendHttpRequest(url,new HttpCallbackListener(){
             @Override
             public void onFinish(String response) {
-                Log.d("111111111",response);
-                Boolean result;
+                Boolean result=false;
                 if ("province".equals(type))
                     result = Utility.handleProvinceResponse(chinaWeatherDB, response);
                 else if ("city".equals((type)))

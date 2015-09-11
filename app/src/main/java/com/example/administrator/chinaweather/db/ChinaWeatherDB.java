@@ -87,7 +87,7 @@ public class ChinaWeatherDB {
             ContentValues values=new ContentValues();
             values.put("county_name",county.getCountyName());
             values.put("county_code",county.getCountyCode());
-            values.put("city_code",county.getCityId());
+            values.put("city_id",county.getCityId());
             db.insert("county", null, values);
         }
     }

@@ -15,7 +15,6 @@ public class HttpUtil {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 HttpURLConnection connection = null;
                 try {
                     URL url = new URL(address);
@@ -31,8 +30,6 @@ public class HttpUtil {
                         response.append(line);
                     }
                     listener.onFinish(response.toString());
-
-
                 } catch (IOException e) {
                     listener.onError(e);
                 }
