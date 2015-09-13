@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">ChinaWeather</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">熊天气</string>
     <string name="action_settings">Settings</string>
 </resources>

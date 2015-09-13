@@ -22,7 +22,7 @@ public class Utility {
                                                               String response){
         if(!TextUtils.isEmpty(response)){
             String [] provinces=response.split(",");
-                if(provinces.length>0){
+            if(provinces.length>0){
                 for(String p:provinces) {
                     String[] array = p.split("\\|");
                     Province province = new Province();
@@ -34,7 +34,7 @@ public class Utility {
             }
             return true;
         }
-      return  false;
+        return  false;
     }
     public synchronized static boolean handleCityResponse(ChinaWeatherDB chinaWeatherDB,String response,
                                                           int provinceId){
@@ -70,7 +70,7 @@ public class Utility {
                 return true;
             }
         }
-                return false;
+        return false;
     }
     public static void handleWeatherResponse(Context context,String response){
         try {
@@ -90,7 +90,7 @@ public class Utility {
     }
     public static void saveWeatherInfo(Context context,String cityName,String weatherCode,
                                        String temp1,String temp2,String weatherDesp,String pushTime){
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyyÄêMÔÂdÈÕ");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyå¹´Mæœˆdæ—¥");
         //SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
         SharedPreferences.Editor editor=PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putBoolean("city_selected",true);

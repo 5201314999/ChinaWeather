@@ -1,6 +1,7 @@
 package com.example.administrator.chinaweather.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -8,9 +9,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.administrator.chinaweather.R;
+import com.example.administrator.chinaweather.service.AutoUpdateService;
 import com.example.administrator.chinaweather.util.HttpCallbackListener;
 import com.example.administrator.chinaweather.util.HttpUtil;
 import com.example.administrator.chinaweather.util.Utility;
@@ -25,6 +28,8 @@ public class WeatherActivity extends Activity {
     private TextView temp1Text;
     private TextView temp2Text;
     private TextView currentTimeText;
+    private ImageView refresh;
+    private ImageView hostpage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +47,28 @@ public class WeatherActivity extends Activity {
         if(!TextUtils.isEmpty(countyCode)){
             Log.d("pogai", countyCode);
             publishTimeText.setText("同步中");
-             weatherLayout.setVisibility(View.INVISIBLE);
-             citynameText.setVisibility(View.INVISIBLE);
+            weatherLayout.setVisibility(View.INVISIBLE);
+            citynameText.setVisibility(View.INVISIBLE);
             queryWeatherCode(countyCode);
+
         }
         else{
             showWeather();
         }
+        refresh=(ImageView)findViewById(R.id.update);
+        hostpage=(ImageView)findViewById(R.id.hostpage);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
+            }
+        });
+        hostpage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_hostpage();
+            }
+        });
 
 
     }
@@ -64,15 +84,11 @@ public class WeatherActivity extends Activity {
         HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
-                Log.d("onfFinish",response);
                 if ("countyCode".equals(type)) {
-                    Log.d("countyCode",type);
                     if (!TextUtils.isEmpty(response)) {
                         String[] array = response.split("\\|");
-                        Log.d("text","abc "+array[0]);
                         if (array != null && array.length == 2) {
                             String weatherCode = array[1];
-                            Log.d("weatherCode",weatherCode);
                             queryWeatherInfo(weatherCode);
                         }
                     }
@@ -99,10 +115,22 @@ public class WeatherActivity extends Activity {
         temp1Text.setText(prefs.getString("temp1",""));
         temp2Text.setText(prefs.getString("temp2",""));
         weatherDspText.setText(prefs.getString("weatherDesp",""));
-        publishTimeText.setText("今天"+prefs.getString("publishTime","")+"发布");
-        currentTimeText.setText(prefs.getString("current_date",""));
+        publishTimeText.setText("今天"+prefs.getString("pushTime","")+"发布");
+        currentTimeText.setText(prefs.getString("current_date", ""));
         weatherLayout.setVisibility(View.VISIBLE);
         citynameText.setVisibility(View.VISIBLE);
+        Intent i=new Intent(WeatherActivity.this, AutoUpdateService.class);
+        startService(i);
     }
-
+    private void refresh(){
+        SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(this);
+        String weatherCode=prefs.getString("weaterCode","");
+        queryWeatherInfo(weatherCode);
+    }
+    private void btn_hostpage(){
+        Intent i=new Intent(WeatherActivity.this,ChooseAreaActivity.class);
+        i.putExtra("isFromWeatherActivity",true);
+        startActivity(i);
+        finish();
+    }
 }

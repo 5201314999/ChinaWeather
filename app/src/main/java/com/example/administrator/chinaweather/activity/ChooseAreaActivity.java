@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -48,14 +47,16 @@ public class ChooseAreaActivity extends Activity {
     private Province selectedProvince;
     private City selectedCity;
     private County selectedCounty;
+    private Boolean isFromWeatherActivity;
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.setContentView(R.layout.choose_area);
+            isFromWeatherActivity =getIntent().getBooleanExtra("isFromWeatherActivity", false);
             SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
-            if(prefs.getBoolean("city_selected",false)){
+            if(prefs.getBoolean("city_selected",false)&&!isFromWeatherActivity){
                 Intent i=new Intent(this,WeatherActivity.class);
                 startActivity(i);
                 finish();
@@ -201,11 +202,16 @@ public class ChooseAreaActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if(level==LEVEL_COUNTY)
+        if (level == LEVEL_COUNTY)
             queryCities(selectedProvince);
-        else if(level==LEVEL_CITY)
+        else if (level == LEVEL_CITY)
             queryProvinces();
-        else
+        else if (isFromWeatherActivity) {
+            Intent i = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+            startActivity(i);
             finish();
+        } else {
+            finish();
+        }
     }
 }
